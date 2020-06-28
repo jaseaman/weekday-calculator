@@ -6,9 +6,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeekdayCalculator.Api", "We
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{418BBC41-403D-4CB3-BC3C-0763049C14F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeekdayCalculator.Core.Tests", "WeekdayCalculator.Core.Tests\WeekdayCalculator.Core.Tests.csproj", "{5B47DB6C-0B86-45FA-974D-810445C09B87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeekdayCalculator.Infrastructure.Tests", "WeekdayCalculator.Infrastructure.Tests\WeekdayCalculator.Infrastructure.Tests.csproj", "{5B47DB6C-0B86-45FA-974D-810445C09B87}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeekdayCalculator.Infrastructure", "WeekdayCalculator.Infrastructure\WeekdayCalculator.Infrastructure.csproj", "{E6B117C3-2DD8-443A-A208-90B070BAA3EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "readme", "readme", "{1FB359CB-0E20-4522-8302-CA03E2C5EF0A}"
+ProjectSection(SolutionItems) = preProject
+	README.md = README.md
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
