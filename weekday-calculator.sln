@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeekdayCalculator.Core", "WeekdayCalculator.Core\WeekdayCalculator.Core.csproj", "{5648E8FD-6B9C-456B-8853-64EFBB94F72F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeekdayCalculator.Api", "WeekdayCalculator.Api\WeekdayCalculator.Api.csproj", "{A902C778-B890-4F6B-9B91-7820BC1BEC37}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{418BBC41-403D-4CB3-BC3C-0763049C14F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeekdayCalculator.Core.Tests", "WeekdayCalculator.Core.Tests\WeekdayCalculator.Core.Tests.csproj", "{5B47DB6C-0B86-45FA-974D-810445C09B87}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5648E8FD-6B9C-456B-8853-64EFBB94F72F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5648E8FD-6B9C-456B-8853-64EFBB94F72F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5648E8FD-6B9C-456B-8853-64EFBB94F72F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5648E8FD-6B9C-456B-8853-64EFBB94F72F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A902C778-B890-4F6B-9B91-7820BC1BEC37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A902C778-B890-4F6B-9B91-7820BC1BEC37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A902C778-B890-4F6B-9B91-7820BC1BEC37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A902C778-B890-4F6B-9B91-7820BC1BEC37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B47DB6C-0B86-45FA-974D-810445C09B87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B47DB6C-0B86-45FA-974D-810445C09B87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B47DB6C-0B86-45FA-974D-810445C09B87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B47DB6C-0B86-45FA-974D-810445C09B87}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5B47DB6C-0B86-45FA-974D-810445C09B87} = {418BBC41-403D-4CB3-BC3C-0763049C14F1}
+	EndGlobalSection
+EndGlobal
