@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using WeekdayCalculator.Core.Services.Dates;
+using WeekdayCalculator.Infrastructure.Services.Dates;
 
 namespace WeekdayCalculator.Api
 {
@@ -20,6 +22,8 @@ namespace WeekdayCalculator.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IDateService, DateService>();
+            
             services.AddMvcCore(options => options.EnableEndpointRouting = false)
                 .AddApiExplorer();
 

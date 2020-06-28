@@ -2,16 +2,24 @@
 using Microsoft.AspNetCore.Mvc;
 using WeekdayCalculator.Api.Controllers.Dates.Requests;
 using WeekdayCalculator.Api.Controllers.Dates.Responses;
+using WeekdayCalculator.Core.Services.Dates;
 
 namespace WeekdayCalculator.Api.Controllers.Dates
 {
     [Route("api")]
     public class DateController : ControllerBase
     {
-        [HttpPost("calculateDays")]
-        public Task<DaysCalculationResponse> CalculateDaysInRange([FromBody] DaysCalculationRequest request)
+        private readonly IDateService _dateService;
+        
+        public DateController(IDateService dateService)
         {
-            return null;
+            _dateService = dateService;
+        }
+        
+        [HttpPost("calculateDays")]
+        public async Task<DaysCalculationResponse> CalculateDaysInRange([FromBody] DaysCalculationRequest request)
+        {
+            return new DaysCalculationResponse();
         }
     }
 }
