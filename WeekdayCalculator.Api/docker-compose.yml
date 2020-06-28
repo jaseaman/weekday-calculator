@@ -8,9 +8,7 @@ services:
       - POSTGRES_DB=postgres
       - PGHOST=localhost
       - PGPORT=4501
-      - POSTGRES_USER=admin
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Password123!
     ports:
       - 4501:4501
-    volumes:
-      - ./postgres-data:/var/lib/postgresql/data

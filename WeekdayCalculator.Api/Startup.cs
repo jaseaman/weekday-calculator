@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using WeekdayCalculator.Core.Services.Dates;
+using WeekdayCalculator.Infrastructure.Repository;
 using WeekdayCalculator.Infrastructure.Repository.EntityFramework;
 using WeekdayCalculator.Infrastructure.Services.Dates;
 
@@ -38,14 +35,15 @@ namespace WeekdayCalculator.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IDateService, DateService>();
-
             var connectionString =
                 $@"User ID={_configuration["Database:Username"]}; Password={_configuration["Database:Password"]}; 
                 Host={_configuration["Database:Endpoint"]}; Port={_configuration["Database:Port"]};
                 Database={_configuration["Database:Name"]}; Pooling=true;";
+            services.AddTransient<IDateService, DateService>();
             services.AddDbContext<WeekdayCalculatorDbContext>(o => { o.UseNpgsql(connectionString); });
-
+            services.AddScoped<DbContext>(s => s.GetService<WeekdayCalculatorDbContext>());
+            services.AddTransient(typeof(IReadRepository<,>), typeof(EntityFrameworkRepository<,>));
+            
             services.AddMvcCore(options => options.EnableEndpointRouting = false)
                 .AddApiExplorer();
 

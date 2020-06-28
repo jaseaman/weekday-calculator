@@ -10,5 +10,11 @@ namespace WeekdayCalculator.Infrastructure.Repository.EntityFramework
         public WeekdayCalculatorDbContext(DbContextOptions<WeekdayCalculatorDbContext> options) : base(options)
         {
         }
+        
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSnakeCaseNamingConvention();
+            base.OnConfiguring(optionsBuilder);
+        }
     }
 }
