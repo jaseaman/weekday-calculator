@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
@@ -18,6 +19,20 @@ namespace WeekdayCalculator.Api
 {
     public class Startup
     {
+        private readonly IHostEnvironment _environment;
+        private readonly IConfiguration _configuration;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
+        {
+            
+            var builder = new ConfigurationBuilder()
+                .SetBasePath($"{environment.ContentRootPath}/Config/")
+                .AddJsonFile($"Secrets/Secrets.{environment.EnvironmentName.ToLower()}.json", false);
+            
+            _environment = environment;
+            _configuration = builder.Build();
+        }
+        
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
