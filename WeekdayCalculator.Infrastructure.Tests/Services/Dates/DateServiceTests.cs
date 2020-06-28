@@ -26,8 +26,16 @@ namespace WeekdayCalculator.Core.Tests.Services.Dates
             new object[] {new DateTime(2020, 6, 26), new DateTime(2020, 6, 29), 0,},
             // Test 2.2 Weeks - Wed 6/05/2020 to Sat 23/05/2020 should return 12, no holidays
             new object[] {new DateTime(2020, 5, 6), new DateTime(2020, 5, 23), 12},
-            // Test Starting / Ending Weekend, more than 1 week - Sat 20/06/2020 to Mon 29/06/2020
-            new object[] {new DateTime(2020, 6, 20), new DateTime(2020, 6, 29), 5,}
+            // Test Starting Sat / Ending Mon, more than 1 week - Sat 20/06/2020 to Mon 29/06/2020
+            new object[] {new DateTime(2020, 6, 20), new DateTime(2020, 6, 29), 5,},
+            // Test Starting Fri / Ending Sun - Fri 19/06/2020 to Sun 28/06/2020
+            new object[] {new DateTime(2020, 6, 19), new DateTime(2020, 6, 28), 5 },
+            // Test for full month - Sun 31/05/2020 - Wed 1/07/2020, should return 22
+            new object[] {new DateTime(2020, 5, 31), new DateTime(2020,7,1), 22},
+            // Test for full year - Tue 31/12/2020 - Fri 1/1/2020, should return 
+            new object[] {new DateTime(2019, 12, 31), new DateTime(2021,1,1), 262},
+            // Test same day, should return 0
+            new object[] {new DateTime(2020, 6, 25), new DateTime(2020,6,25), 0}
         };
 
         [OneTimeSetUp]

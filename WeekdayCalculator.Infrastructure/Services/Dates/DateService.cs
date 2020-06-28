@@ -25,9 +25,12 @@ namespace WeekdayCalculator.Infrastructure.Services.Dates
         {
             // Calculate total days exclusive
             var totalDays = (long) (to - from).TotalDays + 1;
+            
+            // If it is invalid input, or the same day there are 0 working days
+            if (totalDays <= 0) return 0; 
 
             // Retrieve all relevant holidays definitions
-            var holidays = await _holidayDefinitionRepository.Query.Where(totalDays >= 365
+            var holidays = await _holidayDefinitionRepository.Query.Where(totalDays < 365
                 ? HolidayDefinition.BetweenDates(from, to)
                 : h => true).ToListAsync();
 
@@ -38,19 +41,26 @@ namespace WeekdayCalculator.Infrastructure.Services.Dates
                 // TODO : Remove holidays that are on weekends
                 removalDays += holidays.Count;
             }
-            
+
             // Remove holidays for the start portion
             foreach (var h in holidays)
             {
-                
             }
-            
+
             // Remove holidays for the end portion
 
-            // Account for weekends
-            var weekends = totalDays / 7 * 2
-                + (from.DayOfWeek == DayOfWeek.Saturday || to.DayOfWeek == DayOfWeek.Sunday ? 2 : 0)
-                + (from.DayOfWeek == DayOfWeek.Sunday || to.DayOfWeek == DayOfWeek.Saturday ? 1 : 0);
+            // Account for weekends, slightly messy, but optimal
+            var weekends = totalDays / 7 * 2;
+
+            weekends += from.DayOfWeek == DayOfWeek.Saturday || to.DayOfWeek == DayOfWeek.Sunday ? 2 : 0;
+            weekends += from.DayOfWeek == DayOfWeek.Sunday || to.DayOfWeek == DayOfWeek.Saturday ? 1 : 0;
+            
+            // If the weekend starts and ends on a saturday / sunday, adjust as it is already accounted for
+            if (totalDays >= 7 &&
+                (from.DayOfWeek == DayOfWeek.Saturday && to.DayOfWeek == DayOfWeek.Sunday ||
+                 from.DayOfWeek == DayOfWeek.Sunday && to.DayOfWeek == DayOfWeek.Sunday))
+                weekends -= 2;
+
             removalDays += weekends;
             // Deal with partial years (Beginning slice and final slice)
             return totalDays - removalDays;

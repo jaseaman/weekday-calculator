@@ -19,7 +19,11 @@ namespace WeekdayCalculator.Api.Controllers.Dates
         [HttpPost("calculateDays")]
         public async Task<DaysCalculationResponse> CalculateDaysInRange([FromBody] DaysCalculationRequest request)
         {
-            return new DaysCalculationResponse();
+            var businessDays = await _dateService.CalculateWorkingDaysExclusive(request.StartDate, request.EndDate);
+            return new DaysCalculationResponse
+            {
+                NumberOfBusinessDays = businessDays
+            };
         }
     }
 }
