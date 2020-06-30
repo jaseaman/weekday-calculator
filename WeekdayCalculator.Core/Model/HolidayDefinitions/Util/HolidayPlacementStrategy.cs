@@ -4,6 +4,6 @@
     {
         FixedDate,
         FixedDay,
-        FixedDayNotWeekend
+        FixedDateNonWeekend
     }
 }

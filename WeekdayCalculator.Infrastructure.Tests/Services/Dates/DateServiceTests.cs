@@ -29,13 +29,21 @@ namespace WeekdayCalculator.Core.Tests.Services.Dates
             // Test Starting Sat / Ending Mon, more than 1 week - Sat 20/06/2020 to Mon 29/06/2020
             new object[] {new DateTime(2020, 6, 20), new DateTime(2020, 6, 29), 5,},
             // Test Starting Fri / Ending Sun - Fri 19/06/2020 to Sun 28/06/2020
-            new object[] {new DateTime(2020, 6, 19), new DateTime(2020, 6, 28), 5 },
-            // Test for full month - Sun 31/05/2020 - Wed 1/07/2020, should return 22
-            new object[] {new DateTime(2020, 5, 31), new DateTime(2020,7,1), 22},
+            new object[] {new DateTime(2020, 6, 19), new DateTime(2020, 6, 28), 5},
+            // Test with a weekend in the middle of the range
+            new object[] {new DateTime(2020, 6, 11), new DateTime(2020, 6, 16), 2},
+            // Test for full month with holiday - Sun 31/05/2020 - Wed 1/07/2020, should return 22
+            new object[] {new DateTime(2020, 5, 31), new DateTime(2020, 7, 1), 21},
             // Test for full year - Tue 31/12/2020 - Fri 1/1/2020, should return 
-            new object[] {new DateTime(2019, 12, 31), new DateTime(2021,1,1), 262},
+            new object[] {new DateTime(2019, 12, 31), new DateTime(2021, 1, 1), 258},
             // Test same day, should return 0
-            new object[] {new DateTime(2020, 6, 25), new DateTime(2020,6,25), 0}
+            new object[] {new DateTime(2020, 6, 25), new DateTime(2020, 6, 25), 0},
+            // Test with single fixed date holiday Christmas, should return 22
+            new object[] {new DateTime(2020, 11, 30), new DateTime(2021, 1, 1), 22},
+            // Test short range of years
+            new object[] {new DateTime(2017, 5, 30), new DateTime(2020, 5, 17), 755},
+            // Test long range of years
+            new object[] {new DateTime(1900, 5, 30), new DateTime(2020, 5, 17), 30588}
         };
 
         [OneTimeSetUp]

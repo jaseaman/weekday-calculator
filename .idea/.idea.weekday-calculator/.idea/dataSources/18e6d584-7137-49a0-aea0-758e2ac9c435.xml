@@ -1408,15 +1408,15 @@ true posix/WET
 false posix/Zulu
 true posixrules
 </TimeZones>
-      <StartupTime>1593292787</StartupTime>
+      <StartupTime>1593429996</StartupTime>
     </root>
     <database id="2" parent="1" name="postgres">
       <ObjectId>13408</ObjectId>
       <Comment>default administrative connection database</Comment>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>488</IntrospectionStateNumber>
+      <IntrospectionStateNumber>560</IntrospectionStateNumber>
       <Current>1</Current>
-      <Relations>sequence|table|16384|16386|1
+      <Relations>sequence|table|32802|32804|1
 </Relations>
     </database>
     <role id="3" parent="1" name="pg_execute_server_program">
@@ -1468,7 +1468,7 @@ true posixrules
       <Comment>standard public schema</Comment>
       <StateNumber>276</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>489</IntrospectionStateNumber>
+      <IntrospectionStateNumber>561</IntrospectionStateNumber>
       <Current>1</Current>
     </schema>
     <access-method id="15" parent="2" name="heap">
@@ -1539,55 +1539,74 @@ true posixrules
     <language id="25" parent="2" name="plpgsql"/>
     <language id="26" parent="2" name="sql"/>
     <sequence id="27" parent="14" name="holiday_definitions_id_seq">
-      <ObjectId>16384</ObjectId>
+      <ObjectId>32802</ObjectId>
       <Owner>postgres</Owner>
-      <StateNumber>487</StateNumber>
+      <StateNumber>559</StateNumber>
       <SequenceIdentity>1</SequenceIdentity>
       <CacheSize>1</CacheSize>
       <DataType>bigint|0s</DataType>
     </sequence>
     <table id="28" parent="14" name="holiday_definitions">
-      <ObjectId>16386</ObjectId>
+      <ObjectId>32804</ObjectId>
       <Owner>postgres</Owner>
-      <StateNumber>487</StateNumber>
+      <StateNumber>559</StateNumber>
     </table>
     <column id="29" parent="28" name="id">
       <Position>1</Position>
       <DataType>bigint|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>487</StateNumber>
+      <StateNumber>559</StateNumber>
       <DefaultExpression>nextval(&apos;holiday_definitions_id_seq&apos;::regclass)</DefaultExpression>
       <TypeId>20</TypeId>
     </column>
-    <column id="30" parent="28" name="placement_strategy">
+    <column id="30" parent="28" name="name">
       <Position>2</Position>
       <DataType>varchar(128)|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>487</StateNumber>
+      <StateNumber>559</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="31" parent="28" name="month">
+    <column id="31" parent="28" name="placement_strategy">
       <Position>3</Position>
-      <DataType>integer|0s</DataType>
-      <StateNumber>487</StateNumber>
-      <TypeId>23</TypeId>
+      <DataType>varchar(128)|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>559</StateNumber>
+      <TypeId>1043</TypeId>
     </column>
-    <column id="32" parent="28" name="day">
+    <column id="32" parent="28" name="week_of_month">
       <Position>4</Position>
       <DataType>integer|0s</DataType>
-      <StateNumber>487</StateNumber>
+      <StateNumber>559</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <index id="33" parent="28" name="holiday_definitions_pkey">
-      <ObjectId>16390</ObjectId>
-      <StateNumber>487</StateNumber>
+    <column id="33" parent="28" name="month">
+      <Position>5</Position>
+      <DataType>integer|0s</DataType>
+      <StateNumber>559</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="34" parent="28" name="day">
+      <Position>6</Position>
+      <DataType>integer|0s</DataType>
+      <StateNumber>559</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="35" parent="28" name="day_of_week">
+      <Position>7</Position>
+      <DataType>integer|0s</DataType>
+      <StateNumber>559</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <index id="36" parent="28" name="holiday_definitions_pkey">
+      <ObjectId>32808</ObjectId>
+      <StateNumber>559</StateNumber>
       <ColNames>id</ColNames>
       <Unique>1</Unique>
       <Primary>1</Primary>
     </index>
-    <key id="34" parent="28" name="holiday_definitions_pkey">
-      <ObjectId>16391</ObjectId>
-      <StateNumber>487</StateNumber>
+    <key id="37" parent="28" name="holiday_definitions_pkey">
+      <ObjectId>32809</ObjectId>
+      <StateNumber>559</StateNumber>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>holiday_definitions_pkey</UnderlyingIndexName>

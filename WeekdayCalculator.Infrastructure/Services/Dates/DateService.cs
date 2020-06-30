@@ -3,7 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WeekdayCalculator.Core.Model.HolidayDefinitions;
+using WeekdayCalculator.Core.Model.HolidayDefinitions.Util;
 using WeekdayCalculator.Core.Services.Dates;
+using WeekdayCalculator.Core.Util.Dates;
 using WeekdayCalculator.Infrastructure.Repository;
 
 namespace WeekdayCalculator.Infrastructure.Services.Dates
@@ -17,53 +19,84 @@ namespace WeekdayCalculator.Infrastructure.Services.Dates
             _holidayDefinitionRepository = holidayDefinitionRepository;
         }
 
+        /// <inheritdoc />
         public async Task<long> CalculateWorkingDaysExclusive(DateTime from, DateTime to) =>
             await CalculateWorkingDays(from.AddDays(1), to.AddDays(-1));
 
-
+        /// <inheritdoc />
         public async Task<long> CalculateWorkingDays(DateTime from, DateTime to)
         {
-            // Calculate total days exclusive
             var totalDays = (long) (to - from).TotalDays + 1;
-            
-            // If it is invalid input, or the same day there are 0 working days
-            if (totalDays <= 0) return 0; 
+            if (totalDays <= 0) return 0;
 
-            // Retrieve all relevant holidays definitions
-            var holidays = await _holidayDefinitionRepository.Query.Where(totalDays < 365
-                ? HolidayDefinition.BetweenDates(from, to)
-                : h => true).ToListAsync();
+            // Retrieve all relevant holidays definitions from data source, pull all if the total days elapses a year
+            var holidays = await _holidayDefinitionRepository.Query
+                .Where(totalDays < 365 ? HolidayDefinition.BetweenMonths(from, to) : h => true)
+                .ToListAsync();
 
-            // Efficiently calculate whole years, removing in batch. Skipping the first and last years (as they may be partial)
+            // Efficiently calculate whole years, removing in batch. Skipping the last remainder of a year
+            // Additional performance could be achieved with asynchronous batching
             var removalDays = 0L;
-            for (var y = from.Year + 1; y <= to.Year - 1; y++)
+            var fullYears = totalDays / 365;
+            for (var y = 0; y < fullYears; y++)
             {
-                // TODO : Remove holidays that are on weekends
-                removalDays += holidays.Count;
+                // Determine the count of all holidays that rest on a weekday
+                removalDays = holidays
+                    .Select(h => GetHolidayDate(from.Year + y, h).DayOfWeek)
+                    .Aggregate(removalDays, (days, holidayDay) =>
+                        days + (holidayDay != DayOfWeek.Saturday && holidayDay != DayOfWeek.Sunday ? 1 : 0));
             }
 
-            // Remove holidays for the start portion
-            foreach (var h in holidays)
-            {
-            }
+            // Calculate the overflow of days 
+            var excessDays = totalDays % (DateTime.IsLeapYear(to.Year) ? 366 : 365);
 
-            // Remove holidays for the end portion
+            if (excessDays > 0)
+                // Sum all holidays that exist within the partial range that are not on a weekend
+                removalDays += holidays
+                    .Where(h => h.Month >= to.AddDays(-excessDays).Month)
+                    .Count(h =>
+                    {
+                        // Conditional as to what year the holiday falls on, i.e. 1/06/2020 - 1/05/2021
+                        var holidayDate = GetHolidayDate(to.Year, h);
+                        // Assume that if it isn't within the last year, it is in the previous year
+                        if (holidayDate > to) holidayDate = GetHolidayDate(to.Year - 1, h);
+                        return holidayDate >= from && holidayDate <= to &&
+                               holidayDate.DayOfWeek != DayOfWeek.Saturday &&
+                               holidayDate.DayOfWeek != DayOfWeek.Sunday;
+                    });
 
-            // Account for weekends, slightly messy, but optimal
+            // Account for weekends in bulk
             var weekends = totalDays / 7 * 2;
 
-            weekends += from.DayOfWeek == DayOfWeek.Saturday || to.DayOfWeek == DayOfWeek.Sunday ? 2 : 0;
-            weekends += from.DayOfWeek == DayOfWeek.Sunday || to.DayOfWeek == DayOfWeek.Saturday ? 1 : 0;
-            
-            // If the weekend starts and ends on a saturday / sunday, adjust as it is already accounted for
-            if (totalDays >= 7 &&
-                (from.DayOfWeek == DayOfWeek.Saturday && to.DayOfWeek == DayOfWeek.Sunday ||
-                 from.DayOfWeek == DayOfWeek.Sunday && to.DayOfWeek == DayOfWeek.Sunday))
-                weekends -= 2;
+            // Cycle through remaining days (Maximum 6) to determine how many additional weekends
+            var remainingWeekOverflow = totalDays % 7;
+            if (remainingWeekOverflow > 0)
+            {
+                var lastProcessedDate = to.AddDays(-remainingWeekOverflow);
+                // TODO : There is a more optimal way, but in the interest of time the performance increase is negligible
+                for (var d = 1; d <= remainingWeekOverflow; d++)
+                {
+                    var day = lastProcessedDate.AddDays(d).DayOfWeek;
+                    if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) weekends++;
+                }
+            }
 
             removalDays += weekends;
-            // Deal with partial years (Beginning slice and final slice)
             return totalDays - removalDays;
+        }
+
+        private DateTime GetHolidayDate(int year, HolidayDefinition holidayDefinition)
+        {
+            return Enum.Parse<HolidayPlacementStrategy>(holidayDefinition.PlacementStrategy) switch
+            {
+                HolidayPlacementStrategy.FixedDate => DateUtils.CalculateFixedDatePlacement(year,
+                    holidayDefinition.Month, holidayDefinition.Day),
+                HolidayPlacementStrategy.FixedDay => DateUtils.CalculateFixedDayPlacement(year, holidayDefinition.Month,
+                    holidayDefinition.DayOfWeek, holidayDefinition.WeekOfMonth),
+                HolidayPlacementStrategy.FixedDateNonWeekend => DateUtils.CalculateFixedDateNonWeekendPlacement(year,
+                    holidayDefinition.Month, holidayDefinition.Day),
+                _ => throw new InvalidOperationException($"'{holidayDefinition.PlacementStrategy}' is not handled")
+            };
         }
     }
 }
